@@ -1,6 +1,6 @@
-# JKFIRM Vue 3 - Inventory & Invoice Management System
+# PS HANDPAPER - Inventory & Invoice Management System
 
-This is a modern Vue 3 + Tailwind CSS version of the JKFIRM application.
+This is a modern Vue 3 + Tailwind CSS version of the PS HANDPAPER application.
 
 ## Features
 
