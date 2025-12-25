@@ -76,6 +76,7 @@
           <input 
             v-model.number="formData.contact" 
             type="number" 
+            maxlength="10"
             placeholder="e.g., 9876543210"
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:border-purple-300" 
           />

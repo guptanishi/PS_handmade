@@ -16,12 +16,12 @@ exports.create = (req, res) => {
     delMode: req.body.delMode,
     userName: req.body.userName,
     products: req.body.products,
-    customerId: req.body.customer.customerId,
-    customerName: req.body.customer.customerName,
-    address: req.body.customer.address,
-    state: req.body.customer.state,
-    contact: req.body.customer.contact,
-    gstNumber: req.body.customer.gstNumber,
+    customerId: req.body.customerId,
+    customerName: req.body.customerName,
+    address: req.body.address,
+    state: req.body.state,
+    contact: req.body.contact,
+    gstNumber: req.body.gstNumber,
     totalAmount: req.body.totalAmount,
     paymentMode: req.body.paymentMode,
     payment: req.body.payment,
@@ -65,6 +65,23 @@ exports.findLastIdRowInvoiceNumber = (req, res) => {
         message:
           err.message || "Some error occurred while retrieving invoice."
       });
+    });
+};
+
+//Find a single Invoice with an id
+exports.findOne = (req, res) => {
+  const id = req.params.id;
+
+  Invoice.findById(id)
+    .then(data => {
+      if (!data)
+        res.status(404).send({ message: "Not found Invoice with id " + id });
+      else res.send(data);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving Invoice with id=" + id });
     });
 };
 

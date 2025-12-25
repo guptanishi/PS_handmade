@@ -121,9 +121,14 @@ const router = useRouter()
 const route = useRoute()
 const formData = ref(null)
 
-onMounted(() => {
-  if (history.state && history.state.customer) {
-    formData.value = { ...history.state.customer }
+onMounted(async () => {
+  try {
+    const response = await customerService.findOne(route.params.id)
+    formData.value = { ...response.data }
+  } catch (error) {
+    console.error('Error loading customer:', error)
+    alert('Failed to load customer data')
+    router.push('/customers')
   }
 })
 

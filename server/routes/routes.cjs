@@ -17,15 +17,17 @@ module.exports = app => {
   // Customer routes
   router.post("/customers/create", customers.create);
   router.get("/customers/", customers.findAll);
+  router.get("/customers/lastRecord", customers.findLastRecord);
+  router.get("/customers/:id", customers.findOne);
   router.post("/customers/:id", customers.update);
   router.delete("/customers/:id", customers.delete);
-  router.get("/customers/lastRecord", customers.findLastRecord);
 
   // Invoice routes
   router.get("/invoices/", invoices.findAll);
   router.post("/invoices/create", invoices.create);
-  router.post("/invoices/:id", invoices.update);
   router.get("/invoices/lastRecord", invoices.findLastIdRowInvoiceNumber);
+  router.get("/invoices/:id", invoices.findOne);
+  router.post("/invoices/:id", invoices.update);
   router.delete("/invoices/:id", invoices.delete);
 
   // Cash Memo routes

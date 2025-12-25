@@ -25,7 +25,8 @@ export const customerService = {
   create: (data) => api.post('/customers/create', data),
   update: (id, data) => api.post(`/customers/${id}`, data),
   delete: (id) => api.delete(`/customers/${id}`),
-  getLastRecord: () => api.get('/customers/lastRecord')
+  getLastRecord: () => api.get('/customers/lastRecord'),
+  findOne: (id) => api.get(`/customers/${id}`)
 }
 
 // Invoices API
@@ -34,7 +35,8 @@ export const invoiceService = {
   create: (data) => api.post('/invoices/create', data),
   update: (id, data) => api.post(`/invoices/${id}`, data),
   delete: (id) => api.delete(`/invoices/${id}`),
-  getLastRecord: () => api.get('/invoices/lastRecord')
+  getLastRecord: () => api.get('/invoices/lastRecord'),
+  findOne: (id) => api.get(`/invoices/${id}`)
 }
 
 // Cash Memos API

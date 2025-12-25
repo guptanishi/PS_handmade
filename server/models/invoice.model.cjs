@@ -12,10 +12,10 @@ module.exports = mongoose => {
       state: String,
       contact: Number,
       gstNumber: String,
-      paymentMode: String,
       totalAmount: String,
+      paymentMode: String,
       payment: String,
-      paymentDate: String,
+      paymentDate: String
     },
     { timestamps: true }
   );

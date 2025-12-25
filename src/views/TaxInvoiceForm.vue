@@ -125,11 +125,11 @@
         
         <div class="space-y-3">
           <div v-for="(item, index) in formData.products" :key="index" class="bg-gray-50 p-4 rounded-xl border-2 border-gray-100 hover:border-green-200 transition-all duration-300">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
               <select 
                 v-model="item.product" 
                 @change="updateProduct(index)" 
-                class="px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                class="px-2 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">Select Product</option>
                 <option v-for="product in products" :key="product.id" :value="product">
@@ -140,13 +140,19 @@
                 v-model.number="item.quantity" 
                 type="number" 
                 placeholder="Quantity" 
-                class="px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                class="px-2 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
               />
               <input 
                 v-model.number="item.price" 
                 type="number" 
                 placeholder="Price" 
-                class="px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                class="px-2 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+              />
+                <input 
+                v-model.number="item.vat" 
+                type="text" 
+                placeholder="VAT" 
+                class="px-2 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
               />
               <input 
                 :value="(item.quantity * item.price).toFixed(2)" 
@@ -197,9 +203,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToastStore } from '../stores/toast'
 import { invoiceService, customerService, productService } from '../services/api'
 
 const router = useRouter()
+const toast = useToastStore()
 
 const formData = ref({
   invoiceNumber: '',
@@ -239,7 +247,7 @@ const selectCustomer = () => {
 }
 
 const addProductRow = () => {
-  formData.value.products.push({ product: '', quantity: 1, price: 0 })
+  formData.value.products.push({ product: '', quantity: 1, price: 0, vat: 0 })
 }
 
 const removeProduct = (index) => {
@@ -250,6 +258,7 @@ const updateProduct = (index) => {
   const item = formData.value.products[index]
   if (item.product) {
     item.price = item.product.price
+    item.vat = item.product.vat || 0
   }
 }
 
@@ -257,11 +266,11 @@ const handleSubmit = async () => {
   formData.value.totalAmount = calculateTotal.value.toString()
   try {
     await invoiceService.create(formData.value)
-    alert('Invoice created successfully!')
-    router.push('/invoices')
+     toast.success('Invoice created successfully!')
+     router.push('/invoices')
   } catch (error) {
     console.error('Error:', error)
-    alert('Failed to create invoice')
+     toast.error('Failed to create invoice')
   }
 }
 

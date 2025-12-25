@@ -40,7 +40,6 @@
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Date</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Customer</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Amount</th>
-              <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Payment</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -60,21 +59,23 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="text-green-600 font-bold text-lg">₹{{ Number(invoice.totalAmount).toLocaleString() }}</span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span v-if="invoice.payment" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">
-                  ✓ {{ invoice.payment }}
-                </span>
-                <span v-else class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700">
-                  ⏳ Pending
-                </span>
-              </td>
+              
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex space-x-3">
                   <button 
-                    @click="viewPdf(invoice.id)" 
+                    @click="editInvoice(invoice.id)" 
                     class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 font-semibold text-sm shadow-md hover:shadow-lg transform hover:scale-105"
                   >
                     👁️ View
+                  </button>
+                  <button 
+                    @click="downloadPdf(invoice.id)" 
+                    class="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300 font-semibold text-sm shadow-md hover:shadow-lg transform hover:scale-105"
+                  >
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Download
                   </button>
                   <button 
                     @click="deleteInvoice(invoice.id)" 
@@ -127,8 +128,14 @@ const loadInvoices = async () => {
   }
 }
 
-const viewPdf = (id) => {
-  router.push({ name: 'pdfGenerator', params: { id } })
+const editInvoice = (id) => {
+  router.push({ path: '/invoices/create', params: { id } })
+}
+
+const downloadPdf = (id) => {
+  // Open PDF generator in a new window
+  const pdfUrl = `/pdf/${id}`
+  window.open(pdfUrl, '_blank')
 }
 
 const deleteInvoice = async (id) => {

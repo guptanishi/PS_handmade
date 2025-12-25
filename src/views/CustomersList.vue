@@ -83,7 +83,7 @@
                     ✏️ Edit
                   </button>
                   <button 
-                    @click="deleteCustomer(customer.id)" 
+                    @click="confirmDelete(customer)" 
                     class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 font-semibold text-sm shadow-md hover:shadow-lg transform hover:scale-105"
                   >
                     🗑️ Delete
@@ -101,17 +101,31 @@
       </div>
     </div>
   </div>
+    <ConfirmDialog
+      v-model="showDeleteDialog"
+      title="Delete Customer"
+      :message="`Are you sure you want to delete '${customerToDelete?.customerName}'? This action cannot be undone.`"
+      type="danger"
+      confirm-text="Delete"
+      cancel-text="Cancel"
+      @confirm="handleDelete"
+    />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { customerService } from '../services/api'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
+import { useToastStore } from '../stores/toast'
 
 const router = useRouter()
 const customers = ref([])
 const searchQuery = ref('')
 const loading = ref(false)
+const showDeleteDialog = ref(false)
+const customerToDelete = ref(null)
+const toast = useToastStore()
 
 const filteredCustomers = computed(() => {
   if (!searchQuery.value) return customers.value
@@ -121,11 +135,16 @@ const filteredCustomers = computed(() => {
   )
 })
 
+const confirmDelete = (cust) => {
+  customerToDelete.value = cust
+  showDeleteDialog.value = true
+}
+
 const loadCustomers = async () => {
   loading.value = true
   try {
     const response = await customerService.getAll()
-    customers.value = response.data
+    customers.value = response.data;
   } catch (error) {
     console.error('Error loading customers:', error)
   } finally {
@@ -137,14 +156,19 @@ const editCustomer = (customer) => {
   router.push({ name: 'updateCustomer', params: { id: customer.id }, state: { customer } })
 }
 
-const deleteCustomer = async (id) => {
-  if (confirm('Delete this customer?')) {
-    try {
-      await customerService.delete(id)
-      await loadCustomers()
-    } catch (error) {
-      console.error('Error:', error)
-    }
+const handleDelete = async () => {
+  if (!customerToDelete.value) return
+  
+  try {
+    await customerService.delete(customerToDelete.value.id)
+    await loadCustomers();
+    toast.success(`Customer "${customerToDelete.value.customerName}" deleted successfully`)
+    
+  } catch (error) {
+    console.error('Error deleting customer:', error)
+    toast.error('Failed to delete customer. Please try again.')
+  } finally {
+    customerToDelete.value = null
   }
 }
 
