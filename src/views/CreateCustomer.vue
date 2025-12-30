@@ -97,6 +97,7 @@
           <input 
             v-model="formData.gstNumber" 
             type="text" 
+            required
             placeholder="e.g., 22AAAAA0000A1Z5"
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:border-purple-300 font-mono" 
           />
@@ -123,7 +124,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { customerService } from '../services/api'
 
@@ -141,6 +142,25 @@ const formData = ref({
   gstNumber: ''
 })
 
+const fetchNextCustomerId = async () => {
+  try {
+    const response = await customerService.getLastRecord()
+    // API returns an array with one element or empty array
+    if (response.data && response.data.length > 0 && response.data[0].customerId) {
+      // Extract the number from the last customer ID and increment
+      const lastNumber = parseInt(response.data[0].customerId)
+      formData.value.customerId = (lastNumber + 1).toString()
+    } else {
+      // No records found, start from 1
+      formData.value.customerId = '1'
+    }
+  } catch (error) {
+    console.error('Error fetching last customer ID:', error)
+    // If API call fails or no records found, start from 1
+    formData.value.customerId = '1'
+  }
+}
+
 const handleSubmit = async () => {
   try {
     await customerService.create(formData.value)
@@ -151,4 +171,8 @@ const handleSubmit = async () => {
     alert('Failed to create customer')
   }
 }
+
+onMounted(async () => {
+  await fetchNextCustomerId()
+})
 </script>

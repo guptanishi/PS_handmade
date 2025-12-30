@@ -38,6 +38,7 @@
             <tr>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Invoice #</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Products</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Customer</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Amount</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Actions</th>
@@ -52,8 +53,13 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                 <span class="inline-flex items-center">
-                  📅 {{ invoice.invoiceDate }}
+                  📅 {{ dayjs(invoice.invoiceDate).format('DD/MM/YYYY') }}
                 </span>
+              </td>
+               <td class="px-6 py-4 whitespace-nowrap text-gray-700" v-for="product in invoice.products" :key="product.id">
+                <li class="inline-flex items-center">
+                  {{ product.product.productName }}
+                </li>
               </td>
               <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ invoice.customerName }}</td>
               <td class="px-6 py-4 whitespace-nowrap">
@@ -66,7 +72,7 @@
                     @click="editInvoice(invoice.id)" 
                     class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 font-semibold text-sm shadow-md hover:shadow-lg transform hover:scale-105"
                   >
-                    👁️ View
+                    ✏️ Edit
                   </button>
                   <button 
                     @click="downloadPdf(invoice.id)" 
@@ -102,6 +108,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { invoiceService } from '../services/api'
+import dayjs from 'dayjs';
 
 const router = useRouter()
 const invoices = ref([])
@@ -129,7 +136,7 @@ const loadInvoices = async () => {
 }
 
 const editInvoice = (id) => {
-  router.push({ path: '/invoices/create', params: { id } })
+  router.push({ name: 'editInvoice', params: { id } })
 }
 
 const downloadPdf = (id) => {

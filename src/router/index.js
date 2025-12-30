@@ -68,6 +68,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/invoices/edit/:id',
+      name: 'editInvoice',
+      component: TaxInvoiceForm,
+      props: true
+    },
+    {
       path: '/pdf/:id',
       name: 'pdfGenerator',
       component: PdfGenerator,

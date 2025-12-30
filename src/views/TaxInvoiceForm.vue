@@ -2,12 +2,12 @@
   <div class="container mx-auto px-4 py-10 max-w-6xl">
     <div class="mb-8 animate-fadeIn">
       <h1 class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 mb-2">
-        📝 Create Tax Invoice
+        {{ isEditMode ? '✏️ Edit Tax Invoice' : '📝 Create Tax Invoice' }}
       </h1>
-      <p class="text-gray-600">Generate a professional tax invoice for your customers</p>
+      <p class="text-gray-600">{{ isEditMode ? 'Update invoice details' : 'Generate a professional tax invoice for your customers' }}</p>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="bg-white shadow-2xl rounded-3xl p-8 border border-gray-100">
+    <form v-if="!loading" @submit.prevent="handleSubmit" class="bg-white shadow-2xl rounded-3xl p-8 border border-gray-100">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div class="space-y-2">
           <label class="block text-gray-700 text-sm font-bold">Invoice Number <span class="text-red-500">*</span></label>
@@ -15,7 +15,7 @@
             v-model="formData.invoiceNumber" 
             type="text" 
             required 
-            placeholder="e.g., INV-2024-001"
+            placeholder="enter invoice number"
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 hover:border-green-300" 
           />
         </div>
@@ -193,21 +193,28 @@
           type="submit" 
           class="px-8 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl hover:from-green-700 hover:to-teal-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
         >
-          ✓ Create Invoice
+          {{ isEditMode ? '✓ Update Invoice' : '✓ Create Invoice' }}
         </button>
       </div>
     </form>
+
+    <div v-else class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-green-600"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useToastStore } from '../stores/toast'
+import { useRouter, useRoute } from 'vue-router'
+
 import { invoiceService, customerService, productService } from '../services/api'
 
 const router = useRouter()
-const toast = useToastStore()
+const route = useRoute()
+
+const isEditMode = computed(() => !!route.params.id)
+const loading = ref(true) // Start as true to show spinner initially
 
 const formData = ref({
   invoiceNumber: '',
@@ -231,8 +238,22 @@ const customers = ref([])
 const products = ref([])
 const selectedCustomer = ref('')
 
+const calculateSubtotal = computed(() => {
+  return formData.value.products.reduce((sum, item) => {
+    return sum + (item.quantity * item.price)
+  }, 0)
+})
+
+const calculateTotalTax = computed(() => {
+  return formData.value.products.reduce((sum, item) => {
+    const itemTotal = item.quantity * item.price
+    const tax = (itemTotal * (item.vat || 0)) / 100
+    return sum + tax
+  }, 0)
+})
+
 const calculateTotal = computed(() => {
-  return formData.value.products.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+  return calculateSubtotal.value + calculateTotalTax.value
 })
 
 const selectCustomer = () => {
@@ -265,25 +286,133 @@ const updateProduct = (index) => {
 const handleSubmit = async () => {
   formData.value.totalAmount = calculateTotal.value.toString()
   try {
-    await invoiceService.create(formData.value)
-     toast.success('Invoice created successfully!')
-     router.push('/invoices')
+    if (isEditMode.value) {
+      await invoiceService.update(route.params.id, formData.value)
+      alert('Invoice updated successfully!')
+    } else {
+      const response = await invoiceService.create(formData.value)
+      alert('Invoice created successfully!')
+      
+      if (confirm('Would you like to generate the PDF invoice now?')) {
+        router.push({ name: 'pdfGenerator', params: { id: response.data.id } })
+        return
+      }
+    }
+    router.push('/invoices')
   } catch (error) {
     console.error('Error:', error)
-     toast.error('Failed to create invoice')
+    alert(`Failed to ${isEditMode.value ? 'update' : 'create'} invoice`)
+  }
+}
+
+const loadInvoice = async () => {
+  try {
+    const response = await invoiceService.findOne(route.params.id)
+    const invoice = response.data
+    
+    console.log('Loading invoice:', invoice) // Debug log
+    console.log('Available products:', products.value) // Debug log
+    
+    // Map products - handle different data structures
+    const mappedProducts = (invoice.products || []).map(invProduct => {
+      // Handle if invProduct.product is an object or if the data is flat
+      let productData = invProduct.product || invProduct
+      
+      // Find matching product from products list by id or name
+      let productObj = null
+      if (productData.id) {
+        productObj = products.value.find(p => p.id === productData.id)
+      }
+      if (!productObj && productData.productName) {
+        productObj = products.value.find(p => p.productName === productData.productName)
+      }
+      
+      return {
+        product: productObj || productData,
+        quantity: invProduct.quantity || 1,
+        price: invProduct.price || 0,
+        vat: invProduct.vat || 0
+      }
+    })
+    
+    console.log('Mapped products:', mappedProducts) // Debug log
+    
+    // Populate form data
+    formData.value = {
+      invoiceNumber: invoice.invoiceNumber || '',
+      invoiceDate: invoice.invoiceDate || new Date().toISOString().split('T')[0],
+      delMode: invoice.delMode || '',
+      userName: invoice.userName || localStorage.getItem('username'),
+      customerId: invoice.customerId || '',
+      customerName: invoice.customerName || '',
+      address: invoice.address || '',
+      state: invoice.state || '',
+      contact: invoice.contact || '',
+      gstNumber: invoice.gstNumber || '',
+      paymentMode: invoice.paymentMode || 'Cash',
+      totalAmount: invoice.totalAmount || '0',
+      payment: invoice.payment || '',
+      paymentDate: invoice.paymentDate || '',
+      products: mappedProducts
+    }
+    
+    // Set selected customer
+    const customer = customers.value.find(c => c.customerId === invoice.customerId)
+    if (customer) {
+      selectedCustomer.value = customer
+    }
+    
+    console.log('Form data populated:', formData.value) // Debug log
+    console.log('Selected customer:', selectedCustomer.value) // Debug log
+  } catch (error) {
+    console.error('Error loading invoice:', error)
+    alert('Failed to load invoice: ' + (error.response?.data?.message || error.message))
+    router.push('/invoices')
+  }
+}
+
+const fetchNextInvoiceNumber = async () => {
+  try {
+    const response = await invoiceService.getLastRecord()
+    // API returns an array with one element or empty array
+    if (response.data && response.data.length > 0 && response.data[0].invoiceNumber) {
+      // Extract the number from the last invoice number and increment
+      const lastNumber = parseInt(response.data[0].invoiceNumber)
+      formData.value.invoiceNumber = (lastNumber + 1).toString()
+    } else {
+      // No records found, start from 47
+      formData.value.invoiceNumber = '47'
+    }
+  } catch (error) {
+    console.error('Error fetching last invoice number:', error)
+    // If API call fails or no records found, start from 47
+    formData.value.invoiceNumber = '47'
   }
 }
 
 onMounted(async () => {
+  loading.value = true
   try {
+    // First, load customers and products
     const [custResp, prodResp] = await Promise.all([
       customerService.getAll(),
       productService.getAll()
     ])
     customers.value = custResp.data
     products.value = prodResp.data
+    
+    // Then load invoice data if in edit mode
+    if (isEditMode.value) {
+      await loadInvoice()
+    } else {
+      // If creating new invoice, fetch and set next invoice number
+      await fetchNextInvoiceNumber()
+    }
   } catch (error) {
     console.error('Error loading data:', error)
+    alert('Failed to load data')
+  } finally {
+    loading.value = false
   }
 })
 </script>
