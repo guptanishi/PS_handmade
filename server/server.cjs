@@ -29,5 +29,10 @@ require("./routes/routes.cjs")(app);
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT);
-console.log('API running on port ' + PORT);
+// For Vercel serverless deployment
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  app.listen(PORT);
+  console.log('API running on port ' + PORT);
+}
