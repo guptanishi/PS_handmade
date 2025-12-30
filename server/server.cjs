@@ -11,19 +11,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const db = require("./models/index.cjs");
-console.log(db.url);
-db.mongoose
-  .connect(db.url,  {
-    maxPoolSize: 50,
-    wtimeoutMS: 2500,
-  })
-  .then(() => {
+
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    return;
+  }
+  
+  console.log(db.url);
+  try {
+    await db.mongoose.connect(db.url, {
+      maxPoolSize: 50,
+      wtimeoutMS: 2500,
+    });
+    isConnected = true;
     console.log("Connected to the database!");
-  })
-  .catch(err => {
+  } catch (err) {
     console.log("Cannot connect to the database!", err);
-    process.exit();
-  });
+    throw err;
+  }
+};
 
 require("./routes/routes.cjs")(app);
 
@@ -31,8 +39,13 @@ const PORT = process.env.PORT || 3001;
 
 // For Vercel serverless deployment
 if (process.env.VERCEL) {
-  module.exports = app;
+  module.exports = async (req, res) => {
+    await connectDB();
+    return app(req, res);
+  };
 } else {
-  app.listen(PORT);
-  console.log('API running on port ' + PORT);
+  connectDB().then(() => {
+    app.listen(PORT);
+    console.log('API running on port ' + PORT);
+  });
 }
