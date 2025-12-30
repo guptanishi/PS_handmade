@@ -1,13 +1,15 @@
 import axios from 'axios'
 
+let API_URL = ''
+
 if (process.env.NODE_ENV == "production") {
-	BASE_URL = 'https://ps-handmade.vercel.app';
+	API_URL = 'https://ps-handmade.vercel.app/api';
 } else {
-	BASE_URL = 'http://localhost:3001';
+	API_URL = 'http://localhost:3001/api';
 }
 
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
