@@ -28,113 +28,114 @@
       <div
         id="invoice-content"
         class="mx-auto bg-white border border-red-600 p-4 text-[11px] leading-tight max-w-[800px]"
+        style="max-width: 800px; margin: 0 auto; background-color: white; border: 1px solid black; padding: 16px; font-size: 11px; line-height: 1.25;"
       >
         <!-- Top row: GSTN / TIN / Phone -->
-        <div class="flex justify-between text-[10px] mb-1">
+        <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
           <div>
             <div>GSTN : {{ companyInfo.gstn }}</div>
             <div>TIN No. : {{ companyInfo.tin }}</div>
           </div>
-          <div class="text-center font-semibold">
+          <div style="text-align: center; font-weight: 600;">
             TAX INVOICE
           </div>
-          <div class="text-right">
+          <div style="text-align: right;">
             <div>Mob.: {{ companyInfo.mobile1 }}</div>
             <div>{{ companyInfo.mobile2 }}</div>
           </div>
         </div>
 
-        <div class="text-[9px] text-center mb-1">
+        <div style="font-size: 9px; text-align: center; margin-bottom: 4px;">
           (ALL SUBJECT TO ORAI JURISDICTION) |
           Approved Unit by Khadi &amp; Village Industries Board, LUCKNOW
         </div>
 
         <!-- Company name & address -->
-        <div class="border-y border-red-600 py-1 mb-2">
-          <div class="text-center font-extrabold text-lg tracking-wide">
+        <div style="border-top: 1px solid black; border-bottom: 1px solid black; padding: 4px 0; margin-bottom: 8px;">
+          <div style="text-align: center; font-weight: 800; font-size: 18px; letter-spacing: 0.05em;">
             {{ companyInfo.name }}
           </div>
-          <div class="text-center text-[10px]">
+          <div style="text-align: center; font-size: 10px;">
             {{ companyInfo.addressLine1 }}
           </div>
-          <div class="text-center text-[10px]">
+          <div style="text-align: center; font-size: 10px;">
             {{ companyInfo.addressLine2 }}
           </div>
-          <div class="text-center text-[10px] font-semibold mt-1">
+          <div style="text-align: center; font-size: 10px; font-weight: 600; margin-top: 4px;">
             MANUFACTURERS OF ALL KINDS OF EXPORT QUALITY HAND MADE PAPERS
           </div>
         </div>
 
         <!-- Bill meta -->
-        <div class="grid grid-cols-3 gap-2 mb-2 text-[10px]">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; font-size: 10px;">
           <div>
-            <span class="font-semibold">Bill No.</span>
-            <span class="inline-block border-b border-red-600 w-32 ml-1">
+            <span style="font-weight: 600;">Bill No.</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 128px; margin-left: 4px; padding-bottom: 5px;">
               {{ invoice.invoiceNumber }}
             </span>
           </div>
-          <div class="col-span-2 text-right">
-            <span class="font-semibold">Date :</span>
-            <span class="inline-block border-b border-red-600 w-32 ml-1 text-right">
-              {{ invoice.invoiceDate }}
+          <div style="grid-column: span 2; text-align: right;">
+            <span style="font-weight: 600;">Date :</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 128px; margin-left: 4px; padding-bottom: 5px; text-align: right;">
+              {{ dayjs(invoice.invoiceDate).format('DD/MM/YYYY') }}
             </span>
           </div>
-          <div class="col-span-3">
-            <span class="font-semibold">Purchaser&nbsp;:</span>
-            <span class="inline-block border-b border-red-600 w-[80%] ml-1">
+          <div style="grid-column: span 3;">
+            <span style="font-weight: 600;">Purchaser&nbsp;:</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 80%; margin-left: 4px; padding-bottom: 5px;">
               {{ invoice.customerName }}
             </span>
           </div>
-          <div class="col-span-2">
-            <span class="font-semibold">Address&nbsp;:</span>
-            <span class="inline-block border-b border-red-600 w-20 ml-1">
+          <div style="grid-column: span 2;">
+            <span style="font-weight: 600;">Address&nbsp;:</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 80px; margin-left: 4px; padding-bottom: 5px;">
               {{ invoice.address }}
             </span>
           </div>
           <div>
-            <span class="font-semibold">State&nbsp;:</span>
-            <span class="inline-block border-b border-red-600 w-28 ml-1">
+            <span style="font-weight: 600;">State&nbsp;:</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 112px; margin-left: 4px;padding-bottom: 5px;">
               {{ invoice.state }}
             </span>
           </div>
           <div>
-            <span class="font-semibold">GSTIN/UIN&nbsp;:</span>
-            <span class="inline-block border-b border-red-600 w-28 ml-1">
+            <span style="font-weight: 600;">GSTIN/UIN&nbsp;:</span>
+            <span style="display: inline-block; border-bottom: 1px solid black; width: 112px; margin-left: 4px;padding-bottom: 5px;">
               {{ invoice.gstNumber }}
             </span>
           </div>
         </div>
 
         <!-- Main items table -->
-        <div class="border border-red-600 mb-2">
+        <div style="border: 1px solid black; margin-bottom: 8px;">
           <!-- Header -->
-          <div class="grid grid-cols-[60px_2fr_100px_100px_100px] border-b border-red-600 text-[10px] font-semibold text-center">
-            <div class="border-r border-red-600 py-1">Qty</div>
-            <div class="border-r border-red-600 py-1">DESCRIPTION OF GOODS</div>
-            <div class="border-r border-red-600 py-1">VAT %</div>
-            <div class="border-r border-red-600 py-1">RATE</div>
-            <div class="py-1">AMOUNT</div>
+          <div style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; border-bottom: 1px solid black; font-size: 10px; font-weight: 600; text-align: center; padding-bottom: 5px;">
+            <div style="border-right: 1px solid black; padding: 4px 0;">Qty</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">VAT %</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">RATE</div>
+            <div style="padding: 4px 0;">AMOUNT</div>
           </div>
 
           <!-- Rows -->
           <div
             v-for="(item, idx) in invoice.products"
             :key="idx"
-            class="grid grid-cols-[60px_2fr_100px_100px_100px] text-[10px] min-h-[24px]"
+            style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; font-size: 10px; min-height: 24px;"
           >
-            <div class="border-r border-red-600 border-b py-0.5 text-center">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               {{ item.quantity }}
             </div>
-            <div class="border-r border-red-600 border-b py-0.5 px-1">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
               {{ item.product.productName }}
             </div>
-            <div class="border-r border-red-600 border-b py-0.5 text-center">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               {{ item.vat }}%
             </div>
-            <div class="border-r border-red-600 border-b py-0.5 text-center">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               ₹{{ item.price }}
             </div>
-            <div class="border-b py-0.5 text-center">
+            <div style="border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               ₹{{ (item.quantity * item.price).toFixed(2) }}
             </div>
           </div>
@@ -143,53 +144,53 @@
           <div
             v-for="n in 3"
             :key="'empty-' + n"
-            class="grid grid-cols-[60px_2fr_100px_100px_100px] text-[10px] min-h-[20px]"
+            style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; font-size: 10px; min-height: 20px;"
           >
-            <div class="border-r border-red-600 border-b"></div>
-            <div class="border-r border-red-600 border-b"></div>
-            <div class="border-r border-red-600 border-b"></div>
-            <div class="border-r border-red-600 border-b"></div>
-            <div class="border-b"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-bottom: 1px solid black;"></div>
           </div>
         </div>
 
         <!-- Totals section -->
-        <div class="grid grid-cols-[1.5fr_1fr] gap-2 text-[10px] mb-2">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; font-size: 10px; margin-bottom: 8px;">
           <!-- Left: Payment details -->
-          <div class="border border-red-600 p-2">
-            <div class="font-semibold mb-1">Payment Details</div>
-            <div><span class="font-semibold">Mode:</span> {{ invoice.paymentMode }}</div>
-            <div><span class="font-semibold">Delivery Mode:</span> {{ invoice.delMode || 'N/A' }}</div>
+          <div style="border: 1px solid black; padding: 8px;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Payment Details</div>
+            <div><span style="font-weight: 600;">Mode:</span> {{ invoice.paymentMode }}</div>
+            <div><span style="font-weight: 600;">Delivery Mode:</span> {{ invoice.delMode || 'N/A' }}</div>
             
-            <div class="mt-3">
-              <div class="font-semibold mb-1">Amount In Words:</div>
-              <div class="min-h-[32px] border border-red-600 p-1">
+            <div style="margin-top: 12px;">
+              <div style="font-weight: 600; margin-bottom: 4px;">Amount In Words:</div>
+              <div style="min-height: 32px; border: 1px solid black; padding: 4px;">
                 {{ amountInWords }}
               </div>
             </div>
           </div>
 
           <!-- Right: totals -->
-          <div class="border border-red-600">
-            <div class="grid grid-cols-2 text-[10px]">
-              <div class="border-b border-red-600 px-1 py-0.5">
+          <div style="border: 1px solid black;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; font-size: 10px;">
+              <div style="border-bottom: 1px solid black; padding: 2px 4px;">
                 Subtotal
               </div>
-              <div class="border-b border-l border-red-600 px-1 py-0.5 text-right">
+              <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 5px 4px; text-align: right;">
                 ₹{{ calculateSubtotal.toFixed(2) }}
               </div>
 
-              <div class="border-b border-red-600 px-1 py-0.5">
+              <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
                 Tax (VAT)
               </div>
-              <div class="border-b border-l border-red-600 px-1 py-0.5 text-right">
+              <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
                 ₹{{ calculateTax.toFixed(2) }}
               </div>
 
-              <div class="px-1 py-1 font-bold">
+              <div style="padding: 4px; font-weight: 700;">
                 Total Amount
               </div>
-              <div class="border-l border-red-600 px-1 py-1 text-right font-bold">
+              <div style="border-left: 1px solid black; padding: 4px; text-align: right; font-weight: 700;">
                 ₹{{ invoice.totalAmount }}
               </div>
             </div>
@@ -197,22 +198,22 @@
         </div>
 
         <!-- Terms & signature -->
-        <div class="border border-red-600 p-2 text-[9px]">
-          <div class="font-semibold mb-1">Terms &amp; Conditions :</div>
-          <ol class="list-decimal list-inside space-y-0.5 mb-2">
+        <div style="border: 1px solid black; padding: 8px; font-size: 9px;">
+          <div style="font-weight: 600; margin-bottom: 4px;">Terms &amp; Conditions :</div>
+          <ol style="list-style: decimal; list-style-position: inside; margin-bottom: 8px; padding-left: 5px;">
             <li>Goods Once Sold Will Not Be Taken Back.</li>
             <li>Payment terms as agreed upon invoice generation.</li>
             <li>Any disputes subject to local jurisdiction.</li>
           </ol>
 
-          <div class="flex justify-between items-end mt-4">
-            <div class="text-[9px]">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px;">
+            <div style="font-size: 9px;">
               Customer Signature
-              <div class="border-t border-red-600 w-32 mt-8"></div>
+              <div style="border-top: 1px solid black; width: 128px; margin-top: 32px;"></div>
             </div>
-            <div class="text-right text-[10px]">
-              For- <span class="font-semibold">{{ companyInfo.name }}</span>
-              <div class="mt-6 border-t border-red-600 pt-1 text-[9px]">
+            <div style="text-align: right; font-size: 10px;">
+              For- <span style="font-weight: 600;">{{ companyInfo.name }}</span>
+              <div style="margin-top: 24px; border-top: 1px solid black; padding-top: 4px; font-size: 9px;">
                 Authorized Signatory
               </div>
             </div>
@@ -231,6 +232,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { invoiceService } from '../services/api'
+import html2pdf from "html2pdf.js";
+import dayjs from 'dayjs';
 
 const route = useRoute()
 const router = useRouter()
@@ -282,7 +285,7 @@ const convertNumberToWords = (num) => {
     return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + convertLessThanThousand(n % 100) : '')
   }
   
-  const wholePart = Math.floor(num)
+  let wholePart = Math.floor(num)
   let result = ''
   
   if (wholePart >= 10000000) {
@@ -304,9 +307,19 @@ const convertNumberToWords = (num) => {
   return result.trim() + ' Rupees Only'
 }
 
-const downloadPdf = () => {
-  const filename = `Invoice_${invoice.value.invoiceNumber}_${invoice.value.customerName.replace(/\s+/g, '_')}.pdf`
-  window.print()
+const downloadPdf = async () => {
+    const filename = `Invoice_${invoice.value.invoiceNumber}_${invoice.value.customerName.replace(/\s+/g, '_')}.pdf`
+    const element = document.getElementById('invoice-content')
+    
+    const opt = {
+      margin: 0.5,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 3, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }
+    
+    await html2pdf().set(opt).from(element).save()
 }
 
 const loadInvoice = async () => {
@@ -326,6 +339,7 @@ onMounted(loadInvoice)
 </script>
 
 <style>
+/* Keep print styles as fallback */
 @media print {
   body * {
     visibility: hidden;

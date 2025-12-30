@@ -56,10 +56,12 @@
                   📅 {{ dayjs(invoice.invoiceDate).format('DD/MM/YYYY') }}
                 </span>
               </td>
-               <td class="px-6 py-4 whitespace-nowrap text-gray-700" v-for="product in invoice.products" :key="product.id">
-                <li class="inline-flex items-center">
-                  {{ product.product.productName }}
-                </li>
+              <td class="px-6 py-4 text-gray-700">
+                <ul class="list-disc list-inside space-y-1">
+                  <li v-for="product in invoice.products" :key="product.id">
+                    {{ product.product.productName }}
+                  </li>
+                </ul>
               </td>
               <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ invoice.customerName }}</td>
               <td class="px-6 py-4 whitespace-nowrap">
