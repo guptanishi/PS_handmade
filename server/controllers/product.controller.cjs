@@ -14,6 +14,8 @@ exports.create = (req, res) => {
     productCode: req.body.productCode,
     productName: req.body.productName,
     price: req.body.price,
+    size: req.body.size,
+    weight: req.body.weight,
     vat: req.body.vat,
     unit:req.body.unit,
     HSN: req.body.HSN

@@ -3,6 +3,8 @@ module.exports = mongoose => {
     { id: String,
       productCode: String,
       productName: String,
+      size: String,
+      weight: String,
       price: Number,
       vat: Number,
       unit: String,

@@ -18,11 +18,31 @@
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-300"
           />
         </div>
+        
 
         <div class="space-y-2">
           <label class="block text-gray-700 text-sm font-bold">Product Name <span class="text-red-500">*</span></label>
           <input
             v-model="formData.productName"
+            type="text"
+            required
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-300"
+          />
+        </div>
+
+         <div class="space-y-2">
+          <label class="block text-gray-700 text-sm font-bold">Size <span class="text-red-500">*</span></label>
+          <input
+            v-model="formData.size"
+            type="text"
+            required
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-300"
+          />
+        </div>
+        <div class="space-y-2">
+          <label class="block text-gray-700 text-sm font-bold">Weight <span class="text-red-500">*</span></label>
+          <input
+            v-model="formData.weight"
             type="text"
             required
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-300"
@@ -45,7 +65,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="block text-gray-700 text-sm font-bold">VAT (%)</label>
+          <label class="block text-gray-700 text-sm font-bold">GST (%)</label>
           <div class="relative">
             <input
               v-model.number="formData.vat"

@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4 py-10">
     <div class="mb-8 animate-fadeIn">
-      <h1 class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 mb-2">
+      <h1 class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 mb-2 pb-2">
         📋 Invoice Management
       </h1>
       <p class="text-gray-600">Track and manage all your tax invoices</p>

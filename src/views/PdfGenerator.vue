@@ -27,47 +27,48 @@
       <!-- A4-ish container -->
       <div
         id="invoice-content"
-        class="mx-auto bg-white border border-red-600 p-4 text-[11px] leading-tight max-w-[800px]"
-        style="max-width: 800px; margin: 0 auto; background-color: white; border: 1px solid black; padding: 16px; font-size: 11px; line-height: 1.25;"
+        class="mx-auto bg-white border border-red-600 p-4 text-[21px] leading-tight max-w-[800px]"
+        style="max-width: 800px; margin: 0 auto; background-color: white; border: 1px solid black; padding: 16px; font-size: 15px; line-height: 1.25;"
       >
         <!-- Top row: GSTN / TIN / Phone -->
-        <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
-          <div>
-            <div>GSTN : {{ companyInfo.gstn }}</div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+          <div style="font-weight: 600;">
+            <div >GSTN : {{ companyInfo.gstn }}</div>
             <div>TIN No. : {{ companyInfo.tin }}</div>
           </div>
-          <div style="text-align: center; font-weight: 600;">
+          <div style="text-align: center; font-weight: 600; font-size: 16px;">
             TAX INVOICE
           </div>
-          <div style="text-align: right;">
+          <div style="text-align: right; font-weight: 600;">
             <div>Mob.: {{ companyInfo.mobile1 }}</div>
             <div>{{ companyInfo.mobile2 }}</div>
           </div>
+           
         </div>
 
-        <div style="font-size: 9px; text-align: center; margin-bottom: 4px;">
-          (ALL SUBJECT TO ORAI JURISDICTION) |
-          Approved Unit by Khadi &amp; Village Industries Board, LUCKNOW
-        </div>
+        <div style="text-align: right; font-size: 12px; padding: 2px 0; ">
+            <div>Email: {{ companyInfo.email }}</div>
+          
+          </div>
 
         <!-- Company name & address -->
         <div style="border-top: 1px solid black; border-bottom: 1px solid black; padding: 4px 0; margin-bottom: 8px;">
-          <div style="text-align: center; font-weight: 800; font-size: 18px; letter-spacing: 0.05em;">
+          <div style="text-align: center; font-weight: 800; font-size: 21px; letter-spacing: 0.05em;">
             {{ companyInfo.name }}
           </div>
-          <div style="text-align: center; font-size: 10px;">
+          <div style="text-align: center; font-size: 12px;">
             {{ companyInfo.addressLine1 }}
           </div>
-          <div style="text-align: center; font-size: 10px;">
+          <div style="text-align: center; font-size: 12px;">
             {{ companyInfo.addressLine2 }}
           </div>
-          <div style="text-align: center; font-size: 10px; font-weight: 600; margin-top: 4px;">
+          <div style="text-align: center; font-size: 12px; font-weight: 600; margin-top: 4px; padding: 2px 0;">
             MANUFACTURERS OF ALL KINDS OF EXPORT QUALITY HAND MADE PAPERS
           </div>
         </div>
 
         <!-- Bill meta -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; font-size: 10px;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; font-size: 12px;">
           <div>
             <span style="font-weight: 600;">Bill No.</span>
             <span style="display: inline-block; border-bottom: 1px solid black; width: 128px; margin-left: 4px; padding-bottom: 5px;">
@@ -109,10 +110,12 @@
         <!-- Main items table -->
         <div style="border: 1px solid black; margin-bottom: 8px;">
           <!-- Header -->
-          <div style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; border-bottom: 1px solid black; font-size: 10px; font-weight: 600; text-align: center; padding-bottom: 5px;">
+          <div style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; border-bottom: 1px solid black; font-size: 12px; font-weight: 600; text-align: center;">
             <div style="border-right: 1px solid black; padding: 4px 0;">Qty</div>
-            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS</div>
-            <div style="border-right: 1px solid black; padding: 4px 0;">VAT %</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS/HSN</div>
+             <div style="border-right: 1px solid black; padding: 4px 0;">SIZE</div>
+              <div style="border-right: 1px solid black; padding: 4px 0;">WEIGHT</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">GST %</div>
             <div style="border-right: 1px solid black; padding: 4px 0;">RATE</div>
             <div style="padding: 4px 0;">AMOUNT</div>
           </div>
@@ -121,13 +124,19 @@
           <div
             v-for="(item, idx) in invoice.products"
             :key="idx"
-            style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; font-size: 10px; min-height: 24px;"
+            style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; font-size: 12px; min-height: 24px;"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               {{ item.quantity }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
-              {{ item.product.productName }}
+              {{ item.product.productName }}- {{ item.product.HSN }}
+            </div>
+             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+              {{ item.product.size }}
+            </div>
+             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+             {{ item.product.weight }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               {{ item.vat }}%
@@ -144,8 +153,10 @@
           <div
             v-for="n in 3"
             :key="'empty-' + n"
-            style="display: grid; grid-template-columns: 60px 2fr 100px 100px 100px; font-size: 10px; min-height: 20px;"
+            style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; font-size: 12px; min-height: 20px;"
           >
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
@@ -155,12 +166,12 @@
         </div>
 
         <!-- Totals section -->
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; font-size: 10px; margin-bottom: 8px;">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 8px;">
           <!-- Left: Payment details -->
-          <div style="border: 1px solid black; padding: 8px;">
-            <div style="font-weight: 600; margin-bottom: 4px;">Payment Details</div>
-            <div><span style="font-weight: 600;">Mode:</span> {{ invoice.paymentMode }}</div>
-            <div><span style="font-weight: 600;">Delivery Mode:</span> {{ invoice.delMode || 'N/A' }}</div>
+          <div style="border: 1px solid black; padding: 8px; font-size: 12px; line-height: 1.4;">
+            <div style="font-weight: 600;"><span style="font-weight: 600;">Bank:</span> {{ companyInfo.bank.name }}</div>
+            <div><span style="font-weight: 600; margin-top: 4px;">Bank A/C no:</span> {{ companyInfo.bank.accountNumber }}</div>
+            <div><span style="font-weight: 600; margin-bottom: 2px;">IFSC Code:</span> {{ companyInfo.bank.ifsc }}</div>
             
             <div style="margin-top: 12px;">
               <div style="font-weight: 600; margin-bottom: 4px;">Amount In Words:</div>
@@ -172,7 +183,7 @@
 
           <!-- Right: totals -->
           <div style="border: 1px solid black;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; font-size: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; font-size: 12px;">
               <div style="border-bottom: 1px solid black; padding: 2px 4px;">
                 Subtotal
               </div>
@@ -181,7 +192,7 @@
               </div>
 
               <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
-                Tax (VAT)
+                GST
               </div>
               <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
                 ₹{{ calculateTax.toFixed(2) }}
@@ -198,22 +209,27 @@
         </div>
 
         <!-- Terms & signature -->
-        <div style="border: 1px solid black; padding: 8px; font-size: 9px;">
+        <div style="border: 1px solid black; padding: 8px; font-size: 11px;">
           <div style="font-weight: 600; margin-bottom: 4px;">Terms &amp; Conditions :</div>
           <ol style="list-style: decimal; list-style-position: inside; margin-bottom: 8px; padding-left: 5px;">
             <li>Goods Once Sold Will Not Be Taken Back.</li>
             <li>Payment terms as agreed upon invoice generation.</li>
             <li>Any disputes subject to local jurisdiction.</li>
+           
           </ol>
+           <div style="font-size: 11px; text-align: center; margin-bottom: 4px; padding: 2px 0;">
+          (ALL SUBJECT TO ORAI JURISDICTION) |
+          Approved Unit by Khadi &amp; Village Industries Board, LUCKNOW
+        </div>
 
           <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px;">
-            <div style="font-size: 9px;">
+            <div style="font-size: 11px;">
               Customer Signature
               <div style="border-top: 1px solid black; width: 128px; margin-top: 32px;"></div>
             </div>
             <div style="text-align: right; font-size: 10px;">
               For- <span style="font-weight: 600;">{{ companyInfo.name }}</span>
-              <div style="margin-top: 24px; border-top: 1px solid black; padding-top: 4px; font-size: 9px;">
+              <div style="margin-top: 24px; border-top: 1px solid black; padding-top: 4px; font-size: 11px;">
                 Authorized Signatory
               </div>
             </div>
@@ -242,14 +258,19 @@ const loading = ref(false)
 
 const companyInfo = {
   name: 'PARASAR HATH KAGAZ UDYOG',
-  gstn: '09AABCP1234F1Z5',
-  tin: '09123456789',
-  mobile1: '+91 9876543210',
-  mobile2: '+91 9876543211',
-  addressLine1: 'Village Parasar, District Orai',
-  addressLine2: 'Uttar Pradesh - 285001, India'
+  gstn: '09AAVPG6852F2Z7',
+  tin: '09132902565',
+  mobile1: '90005544680',
+  mobile2: '9453525288',
+  addressLine1: 'Turnan Ganj, [124 Alampur]',
+  addressLine2: 'Kalpi-285204, Distt. Jalaun, U.P. India',
+  email: 'pshmpapar@gmail.com',
+  bank: {
+    name: 'Indian Bank, Mandi Branch, Kalpi',
+    accountNumber: '50077829695',
+    ifsc: 'IDIB000K542',
 }
-
+}
 const calculateSubtotal = computed(() => {
   if (!invoice.value?.products) return 0
   return invoice.value.products.reduce((sum, item) => sum + (item.quantity * item.price), 0)

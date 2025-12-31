@@ -42,10 +42,12 @@
               <tr>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Code</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Product Name</th>
+                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Size</th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Weight</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Price</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Unit</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">HSN</th>
-                <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">VAT</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">GST</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-indigo-700 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -57,6 +59,8 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.productName }}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.size }}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.weight }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-green-600 font-bold">₹{{ product.price.toLocaleString() }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ product.unit }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ product.HSN }}</td>
