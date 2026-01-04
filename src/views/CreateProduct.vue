@@ -193,6 +193,7 @@ const formData = ref({
   productName: '',
   size: '',
   weight: '',
+  costPrice: 0,
   price: 0,
   vat: 0,
   qtyAvailable: 0,

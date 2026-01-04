@@ -46,7 +46,7 @@
            
         </div>
 
-        <div style="text-align: right; font-size: 12px; padding: 2px 0; ">
+        <div style="text-align: right; font-size: 12px; padding: 4px 0; ">
             <div>Email: {{ companyInfo.email }}</div>
           
           </div>
@@ -109,28 +109,81 @@
 
         <!-- Main items table -->
         <div style="border: 1px solid black; margin-bottom: 8px;">
-          <!-- Header -->
-          <div style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; border-bottom: 1px solid black; font-size: 12px; font-weight: 600; text-align: center;">
+          <!-- Header for intrastate (CGST/SGST) -->
+          <div v-if="isIntrastate" style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px; border-bottom: 1px solid black; font-size: 12px; font-weight: 600; text-align: center;">
             <div style="border-right: 1px solid black; padding: 4px 0;">Qty</div>
-            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS/HSN</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS</div>
+             <div style="border-right: 1px solid black; padding: 4px 0;">HSN</div>
              <div style="border-right: 1px solid black; padding: 4px 0;">SIZE</div>
               <div style="border-right: 1px solid black; padding: 4px 0;">WEIGHT</div>
-            <div style="border-right: 1px solid black; padding: 4px 0;">GST %</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">CGST %</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">SGST %</div>
             <div style="border-right: 1px solid black; padding: 4px 0;">RATE</div>
             <div style="padding: 4px 0;">AMOUNT</div>
           </div>
 
-          <!-- Rows -->
+          <!-- Header for interstate (IGST) -->
+          <div v-else style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px; border-bottom: 1px solid black; font-size: 12px; font-weight: 600; text-align: center;">
+            <div style="border-right: 1px solid black; padding: 4px 0;">Qty</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">DESCRIPTION OF GOODS</div>
+             <div style="border-right: 1px solid black; padding: 4px 0;">HSN</div>
+             <div style="border-right: 1px solid black; padding: 4px 0;">SIZE</div>
+              <div style="border-right: 1px solid black; padding: 4px 0;">WEIGHT</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">IGST %</div>
+            <div style="border-right: 1px solid black; padding: 4px 0;">RATE</div>
+            <div style="padding: 4px 0;">AMOUNT</div>
+          </div>
+
+          <!-- Rows for intrastate (CGST/SGST) -->
           <div
+            v-if="isIntrastate"
             v-for="(item, idx) in invoice.products"
             :key="idx"
-            style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; font-size: 12px; min-height: 24px;"
+            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 24px;"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
               {{ item.quantity }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
-              {{ item.product.productName }}- {{ item.product.HSN }}
+              {{ item.product.productName }} 
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+              {{ item.product.HSN }}
+            </div>
+             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+              {{ item.product.size }}
+            </div>
+             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+             {{ item.product.weight }}
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
+              {{ item.vat / 2 }}%
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
+              {{ item.vat / 2 }}%
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
+              ₹{{ item.price }}
+            </div>
+            <div style="border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
+              ₹{{ (item.quantity * item.price).toFixed(2) }}
+            </div>
+          </div>
+
+          <!-- Rows for interstate (IGST) -->
+          <div
+            v-else
+            v-for="(item, idx) in invoice.products"
+            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 24px;"
+          >
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center;">
+              {{ item.quantity }}
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+              {{ item.product.productName }} 
+            </div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
+              {{ item.product.HSN }}
             </div>
              <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px;">
               {{ item.product.size }}
@@ -149,12 +202,32 @@
             </div>
           </div>
 
-          <!-- Empty rows for spacing -->
+          <!-- Empty rows for spacing (intrastate) -->
           <div
+            v-if="isIntrastate"
             v-for="n in 3"
             :key="'empty-' + n"
-            style="display: grid; grid-template-columns: 50px 2fr 70px 70px 70px 70px 70px; font-size: 12px; min-height: 20px;"
+            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 20px;"
           >
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
+            <div style="border-bottom: 1px solid black;"></div>
+          </div>
+
+          <!-- Empty rows for spacing (interstate) -->
+          <div
+            v-else
+            v-for="n in 3"
+            :key="n"
+            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 20px;"
+          >
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black;"></div>
@@ -191,12 +264,32 @@
                 ₹{{ calculateSubtotal.toFixed(2) }}
               </div>
 
-              <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
-                GST
-              </div>
-              <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
-                ₹{{ calculateTax.toFixed(2) }}
-              </div>
+              <!-- Intrastate taxes (CGST + SGST) -->
+              <template v-if="isIntrastate">
+                <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
+                  CGST
+                </div>
+                <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
+                  ₹{{ (calculateTax / 2).toFixed(2) }}
+                </div>
+
+                <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
+                  SGST
+                </div>
+                <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
+                  ₹{{ (calculateTax / 2).toFixed(2) }}
+                </div>
+              </template>
+
+              <!-- Interstate tax (IGST) -->
+              <template v-else>
+                <div style="border-bottom: 1px solid black; padding: 2px 4px; padding-bottom: 5px;">
+                  IGST
+                </div>
+                <div style="border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 10px; text-align: right;">
+                  ₹{{ calculateTax.toFixed(2) }}
+                </div>
+              </template>
 
               <div style="padding: 4px; font-weight: 700;">
                 Total Amount
@@ -213,8 +306,8 @@
           <div style="font-weight: 600; margin-bottom: 4px;">Terms &amp; Conditions :</div>
           <ol style="list-style: decimal; list-style-position: inside; margin-bottom: 8px; padding-left: 5px;">
             <li>Goods Once Sold Will Not Be Taken Back.</li>
-            <li>Payment terms as agreed upon invoice generation.</li>
-            <li>Any disputes subject to local jurisdiction.</li>
+            <li>Always use wood FREE Hand Made Paper Product to save the Forest of the earth for our generations to come. </li>
+            <li>Paper Being hand made 10% varation -ve or +ve shade texture thckness etc. will be exempted.</li>
            
           </ol>
            <div style="font-size: 11px; text-align: center; margin-bottom: 4px; padding: 2px 0;">
@@ -256,19 +349,23 @@ const router = useRouter()
 const invoice = ref(null)
 const loading = ref(false)
 
+const isIntrastate = computed(() => {
+  return invoice.value?.gstNumber?.startsWith('09')
+})
+
 const companyInfo = {
-  name: 'PARASAR HATH KAGAZ UDYOG',
+  name: 'PARASAR HATH KAGAJ UDYOG',
   gstn: '09AAVPG6852F2Z7',
   tin: '09132902565',
-  mobile1: '90005544680',
+  mobile1: '9005544680',
   mobile2: '9453525288',
   addressLine1: 'Turnan Ganj, [124 Alampur]',
   addressLine2: 'Kalpi-285204, Distt. Jalaun, U.P. India',
-  email: 'pshmpapar@gmail.com',
+  email: 'pshmpaper@gmail.com',
   bank: {
-    name: 'Indian Bank, Mandi Branch, Kalpi',
-    accountNumber: '50077829695',
-    ifsc: 'IDIB000K542',
+    name: 'Canara Bank, kalpi (U.P.)',
+    accountNumber: '125006223946 /120029568300',
+    ifsc: 'CNRB0018950',
 }
 }
 const calculateSubtotal = computed(() => {

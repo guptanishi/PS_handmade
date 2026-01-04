@@ -284,6 +284,22 @@ const updateProduct = (index) => {
 }
 
 const handleSubmit = async () => {
+  // Validate that at least one product is added
+  if (!formData.value.products || formData.value.products.length === 0) {
+    alert('⚠️ Please add at least one product before submitting the invoice.')
+    return
+  }
+
+  // Validate that all products have required fields
+  const invalidProduct = formData.value.products.find(item => 
+    !item.product || !item.quantity || item.quantity <= 0 || !item.price || item.price <= 0
+  )
+
+  if (invalidProduct) {
+    alert('⚠️ Please ensure all products have valid product selection, quantity, and price.')
+    return
+  }
+
   formData.value.totalAmount = calculateTotal.value.toString()
   try {
     if (isEditMode.value) {
