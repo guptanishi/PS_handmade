@@ -377,7 +377,8 @@ const loadInvoice = async () => {
 
       return {
         product: productObj || productData,
-        weight: invProduct.weight || 1,
+        quantity: invProduct.quantity || 1,
+        weight: invProduct.weight || 0,
         price: invProduct.price || 0,
         vat: invProduct.vat || 0,
       };

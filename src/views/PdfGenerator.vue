@@ -105,7 +105,7 @@
           </div>
           <div style="grid-column: span 2">
             <span style="font-weight: 600">Address&nbsp;:</span>
-            <span style="width: 80px; margin-left: 4px; padding-bottom: 5px "> {{ invoice.address }}, {{ invoice.state }} </span>
+            <span style="width: 80px; margin-left: 4px; padding-bottom: 5px "> {{ invoice.address }} {{ invoice.address ? ',' : '' }} {{ invoice.state }} </span>
           </div>
 
           <div style="text-align: right">
@@ -123,7 +123,7 @@
             v-if="isIntrastate"
             style="
               display: grid;
-              grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px;
+              grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 50px 80px;
               border-bottom: 1px solid black;
               font-size: 12px;
               font-weight: 600;
@@ -146,7 +146,7 @@
             v-else
             style="
               display: grid;
-              grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px;
+              grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 80px;
               border-bottom: 1px solid black;
               font-size: 12px;
               font-weight: 600;
@@ -168,12 +168,12 @@
             v-if="isIntrastate"
             v-for="(item, idx) in invoice.products"
             :key="idx"
-            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 24px"
+            style="display: grid; grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 50px 80px; font-size: 12px; min-height: 24px"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center">
               {{ item.quantity }}
             </div>
-            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px; word-wrap: break-word; overflow-wrap: break-word">
               {{ item.product.productName }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
@@ -183,7 +183,7 @@
               {{ item.product.size }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
-              {{ item.product.weight }}
+              {{ item.weight || item.product.weight }} kg
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center">
               {{ item.vat / 2 }}%
@@ -195,7 +195,7 @@
               ₹{{ item.price }}
             </div>
             <div style="border-bottom: 1px solid black; padding: 2px 0; text-align: center">
-              ₹{{ (item.quantity * item.price).toFixed(2) }}
+              ₹{{ ((item.weight) * item.price).toFixed(2) }}
             </div>
           </div>
 
@@ -203,12 +203,12 @@
           <div
             v-else
             v-for="(item, idx) in invoice.products"
-            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 24px"
+            style="display: grid; grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 80px; font-size: 12px; min-height: 24px"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center">
               {{ item.quantity }}
             </div>
-            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
+            <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px; word-wrap: break-word; overflow-wrap: break-word">
               {{ item.product.productName }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
@@ -218,7 +218,7 @@
               {{ item.product.size }}
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 4px">
-              {{ item.product.weight }}
+              {{ item.weight || item.product.weight }} kg
             </div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black; padding: 2px 0; text-align: center">
               {{ item.vat }}%
@@ -227,7 +227,7 @@
               ₹{{ item.price }}
             </div>
             <div style="border-bottom: 1px solid black; padding: 2px 0; text-align: center">
-              ₹{{ (item.quantity * item.price).toFixed(2) }}
+              ₹{{ ((item.weight) * item.price).toFixed(2) }}
             </div>
           </div>
 
@@ -236,7 +236,7 @@
             v-if="isIntrastate"
             v-for="n in 3"
             :key="'empty-' + n"
-            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 20px"
+            style="display: grid; grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 50px 80px; font-size: 12px; min-height: 20px"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black"></div>
@@ -254,7 +254,7 @@
             v-else
             v-for="n in 3"
             :key="n"
-            style="display: grid; grid-template-columns: 70px 2fr 50px 50px 50px 50px 50px 50px; font-size: 12px; min-height: 20px"
+            style="display: grid; grid-template-columns: 70px 1.2fr 50px 50px 80px 50px 50px 80px; font-size: 12px; min-height: 20px"
           >
             <div style="border-right: 1px solid black; border-bottom: 1px solid black"></div>
             <div style="border-right: 1px solid black; border-bottom: 1px solid black"></div>
@@ -318,8 +318,20 @@
           </div>
         </div>
 
+        <!-- Eway Bill and Vehicle Number -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 8px">
+          <div>
+            <span style="font-weight: 600">E-way Bill No. :</span>
+            <span style="display: inline-block; width: 200px; margin-left: 8px; padding-bottom: 2px"></span>
+          </div>
+          <div>
+            <span style="font-weight: 600">Vehicle No. :</span>
+            <span style="display: inline-block; width: 200px; margin-left: 8px; padding-bottom: 2px"></span>
+          </div>
+        </div>
+
         <!-- Terms & signature -->
-        <div style="border: 1px solid black; padding: 8px; font-size: 11px">
+        <div style="border: 1px solid black; padding: 8px; margin-top: 8px; font-size: 11px">
           <div style="font-weight: 600; margin-bottom: 4px">Terms &amp; Conditions :</div>
           <ol style="list-style: decimal; list-style-position: inside; margin-bottom: 8px; padding-left: 5px">
             <li>Goods Once Sold Will Not Be Taken Back.</li>
@@ -337,7 +349,7 @@
             </div>
             <div style="text-align: right; font-size: 10px">       
               For- <span style="font-weight: 600">{{ companyInfo.name }}</span>
-              <img src="../assets/stamp pshm_tran.png" alt="Company Stamp" class="absolute bottom-15 ml-15 w-20 opacity-90 pointer-events-none" />
+              <img src="../assets/stamp pshm_tran.png" alt="Company Stamp" class="absolute bottom-10 ml-15 w-20 opacity-90 pointer-events-none" />
               <div style="margin-top: 24px;font-size: 11px">Authorized Signatory</div>
             </div>
           </div>
@@ -384,13 +396,13 @@ const companyInfo = {
 };
 const calculateSubtotal = computed(() => {
   if (!invoice.value?.products) return 0;
-  return invoice.value.products.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  return invoice.value.products.reduce((sum, item) => sum + (item.weight) * item.price, 0);
 });
 
 const calculateTax = computed(() => {
   if (!invoice.value?.products) return 0;
   return invoice.value.products.reduce((sum, item) => {
-    const itemTotal = item.quantity * item.price;
+    const itemTotal = (item.weight) * item.price;
     const tax = (itemTotal * (item.vat || 0)) / 100;
     return sum + tax;
   }, 0);
