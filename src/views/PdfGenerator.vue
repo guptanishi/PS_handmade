@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <div style="text-align: right; font-size: 12px; padding: 4px 0">
+        <div style="text-align: right; font-size: 12px; padding: 4px 10px; margin-bottom: 4px">
           <div>Email: {{ companyInfo.email }}</div>
         </div>
 
@@ -80,7 +80,7 @@
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; font-size: 12px">
           <div>
             <span style="font-weight: 600">Bill No.</span>
-            <span style="display: inline-block; border-bottom: 1px solid black; width: 128px; margin-left: 4px; padding-bottom: 5px">
+            <span style="display: inline-block; width: 128px; margin-left: 4px; padding-bottom: 5px">
               {{ invoice.invoiceNumber }}
             </span>
           </div>
@@ -89,11 +89,9 @@
             <span
               style="
                 display: inline-block;
-                border-bottom: 1px solid black;
-                width: 128px;
+                width: 70px;
                 margin-left: 4px;
                 padding-bottom: 5px;
-                text-align: right;
               "
             >
               {{ dayjs(invoice.invoiceDate).format("DD/MM/YYYY") }}
@@ -101,25 +99,18 @@
           </div>
           <div style="grid-column: span 3">
             <span style="font-weight: 600">Purchaser&nbsp;:</span>
-            <span style="display: inline-block; border-bottom: 1px solid black; width: 80%; margin-left: 4px; padding-bottom: 5px">
+            <span style="display: inline-block; width: 80%; margin-left: 4px; padding-bottom: 5px">
               {{ invoice.customerName }}
             </span>
           </div>
           <div style="grid-column: span 2">
             <span style="font-weight: 600">Address&nbsp;:</span>
-            <span style="display: inline-block; border-bottom: 1px solid black; width: 80px; margin-left: 4px; padding-bottom: 5px">
-              {{ invoice.address }}
-            </span>
+            <span style="width: 80px; margin-left: 4px; padding-bottom: 5px "> {{ invoice.address }}, {{ invoice.state }} </span>
           </div>
-          <div>
-            <span style="font-weight: 600">State&nbsp;:</span>
-            <span style="display: inline-block; border-bottom: 1px solid black; width: 112px; margin-left: 4px; padding-bottom: 5px">
-              {{ invoice.state }}
-            </span>
-          </div>
-          <div>
+
+          <div style="text-align: right">
             <span style="font-weight: 600">GSTIN/UIN&nbsp;:</span>
-            <span style="display: inline-block; border-bottom: 1px solid black; width: 112px; margin-left: 4px; padding-bottom: 5px">
+            <span style="display: inline-block; width: 90px; padding-bottom: 5px">
               {{ invoice.gstNumber }}
             </span>
           </div>
@@ -344,10 +335,10 @@
               Customer Signature
               <div style="border-top: 1px solid black; width: 128px; margin-top: 32px"></div>
             </div>
-            <div style="text-align: right; font-size: 10px">
-              <img src="../assets/stamp pshm.png" alt="Company Stamp" class="bottom-10 right-10 w-36 opacity-90 pointer-events-none" />
+            <div style="text-align: right; font-size: 10px">       
               For- <span style="font-weight: 600">{{ companyInfo.name }}</span>
-              <div style="margin-top: 24px; border-top: 1px solid black; padding-top: 4px; font-size: 11px">Authorized Signatory</div>
+              <img src="../assets/stamp pshm_tran.png" alt="Company Stamp" class="absolute bottom-15 ml-15 w-20 opacity-90 pointer-events-none" />
+              <div style="margin-top: 24px;font-size: 11px">Authorized Signatory</div>
             </div>
           </div>
         </div>
