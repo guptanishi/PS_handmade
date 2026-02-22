@@ -59,7 +59,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.productName }}</td>
                 <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.size }}</td>
-                <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.weight }}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-800">{{ product.weight }} kg</td>
                 <td class="px-6 py-4 whitespace-nowrap text-green-600 font-bold">₹{{ product.price.toLocaleString() }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ product.HSN }}</td>
                  <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ product.vat }}%</td>

@@ -75,10 +75,11 @@
           <label class="block text-gray-700 text-sm font-bold">Weight <span class="text-red-500">*</span></label>
           <input
             v-model="formData.weight"
-            type="text"
+            type="number"
             required
             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-300"
           />
+          <p class="text-gray-500 text-sm">Enter the weight in kilograms (kg)</p>
         </div>
 
 
